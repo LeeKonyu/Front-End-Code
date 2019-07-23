@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <script type="text/javascript">
+        document.write("<table border='1' bordercolor='blue'>")
+        for (var i = 9; i >= 1; i--) {
+            document.write("<tr>")
+            for (var j = 1; j <= i; j++) {
+                document.write("<td>")
+                document.write(j + "*" + i + "=" + j * i);
+                document.write("</td>")
+            }
+            document.write("</tr>")
+        }
+        document.write("</table>")
+
+        var test = new Function("alert('a');");
+        test();
+    </script>
+
+
+</body>
+
+</html>

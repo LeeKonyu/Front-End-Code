@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <script type="text/javascript">
+        //获取当前时间
+        var date = new Date();
+        //换成当地时间格式方法
+        document.write(date.toLocaleString());
+        document.write("<br/>");
+
+        //获取当前时间
+        var year = new Date();
+        //获取当前年方法
+        document.write(year.getFullYear());
+        document.write("<br/>");
+
+        //获取当前时间
+        var month = new Date();
+        //获取当前月方法(月是0-11，需要加一)
+        document.write(month.getMonth() + 1);
+        document.write("<br/>");
+
+        //获取当前时间
+        var week = new Date();
+        //获取当前星期方法(星期日0，星期一到星期六为0-6)
+        document.write(week.getDay());
+        document.write("<br/>");
+
+        //获取当前时间
+        var day = new Date();
+        //获取当前日
+        document.write(day.getDate());
+        document.write("<br/>");
+
+        //获取当前时间
+        var hour = new Date();
+        //获取当前小时
+        document.write(hour.getHours());
+    </script>
+
+
+</body>
+
+</html>
