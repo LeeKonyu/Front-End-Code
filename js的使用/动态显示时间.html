@@ -1,0 +1,17 @@
+<html>
+
+<body>
+    <div id="time"></div>
+    <script type="text/javascript">
+        function timeresh() {
+            var date = new Date();
+            var localdate = date.toLocaleString();
+            var div1 = document.getElementById("time");
+            div1.innerHTML = localdate;
+        }
+
+        setInterval("timeresh()", 1000);
+    </script>
+</body>
+
+</html>

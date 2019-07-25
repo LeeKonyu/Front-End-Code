@@ -2,6 +2,10 @@
 
 <body>
     <input type="text" name="tn" id="ti" value="aaa" class="haha">
+    <ul id="ulid">
+        <li>111</li>
+        <li>222</li>
+    </ul>
     <script type="text/javascript">
         var x = document.getElementById('ti');
         alert(x.value);
@@ -9,6 +13,10 @@
         x.setAttribute("name", "heh");
         alert(x.getAttribute("name"));
         alert(x.removeAttribute("name"));
+
+        var xx = document.getElementById("ulid");
+        //获取ul下面子标签的长度
+        alert(xx.getElementsByTagName("li").length)
     </script>
 </body>
 

@@ -1,0 +1,58 @@
+<html>
+
+<body>
+    <ul id="ulid">
+        <li id="liid1">
+            绿谷出久
+        </li>
+        <li id="liid2">
+            轰焦冻
+        </li>
+    </ul>
+
+    <div id="divid"></div>
+
+    <input type="button" value="添加节点" onclick="add()" />
+    <input type="button" value="删除节点" onclick="sc()" />
+    <input type="button" value="替换节点" onclick="th()" />
+    <input type="button" value="复制节点" onclick="fz()" />
+
+    <script type="text/javascript">
+        function add() {
+            var liid2 = document.getElementById("liid2");
+            var liid3 = document.createElement("li");
+            var text3 = document.createTextNode("all might");
+            liid3.appendChild(text3);
+            var ulid = document.getElementById("ulid");
+            ulid.insertBefore(liid3, liid2);
+
+        }
+
+        function sc() {
+            var ulid = document.getElementById("ulid");
+            var liid1 = document.getElementById("liid1");
+            ulid.removeChild(liid1);
+        }
+
+        function th() {
+            var ulid = document.getElementById("ulid");
+            var liid1 = document.getElementById("liid1");
+
+            var liid3 = document.createElement("li");
+            var text3 = document.createTextNode("哇吹");
+            liid3.appendChild(text3);
+
+            ulid.replaceChild(liid3, liid1);
+        }
+
+        function fz() {
+            var ulid = document.getElementById("ulid");
+            var ulcopy = ulid.cloneNode(true);
+            var divid = document.getElementById("divid");
+            divid.appendChild(ulcopy);
+        }
+    </script>
+
+</body>
+
+</html>
