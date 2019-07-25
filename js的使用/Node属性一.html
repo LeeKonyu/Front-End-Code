@@ -1,0 +1,40 @@
+<html>
+
+<body>
+    <div id="divid">(￣▽￣)"</div>
+
+    <script type="text/javascript">
+        //获取标签对象
+        var s1 = document.getElementById("divid");
+        document.write("<br/>");
+        //标签节点对应的值
+        document.write(s1.nodeType);
+        document.write("<br/>");
+        document.write(s1.nodeName);
+        document.write("<br/>");
+        document.write(s1.nodeValue);
+        document.write("<br/>");
+        //获取标签属性对象
+        var s2 = s1.getAttributeNode("id");
+        document.write("<br/>");
+        //属性节点对应的值
+        document.write(s2.nodeType);
+        document.write("<br/>");
+        document.write(s2.nodeName);
+        document.write("<br/>");
+        document.write(s2.nodeValue);
+        document.write("<br/>");
+        //获取文本对象
+        var s3 = s1.firstChild;
+        document.write("<br/>");
+        //文本节点对应的值
+        document.write(s3.nodeType);
+        document.write("<br/>");
+        document.write(s3.nodeName);
+        document.write("<br/>");
+        document.write(s3.nodeValue);
+        document.write("<br/>");
+    </script>
+</body>
+
+</html>

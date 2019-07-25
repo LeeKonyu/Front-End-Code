@@ -1,0 +1,39 @@
+<html>
+
+<head></head>
+
+<body>
+    <table border="1">
+        <tr>
+            <td>操作</td>
+            <td>编号</td>
+            <td>姓名</td>
+        </tr>
+        <tr>
+            <td><input type="button" value="选择" onclick="ss('小李','001')"></td>
+            <td>小李</td>
+            <td>001</td>
+        </tr>
+        <tr>
+            <td><input type="button" value="选择" onclick="ss('小张','002')"></td>
+            <td>小张</td>
+            <td>002</td>
+        </tr>
+        <tr>
+            <td><input type="button" value="选择" onclick="ss('小刘','003')"></td>
+            <td>小刘</td>
+            <td>003</td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        function ss(name1, id1) {
+
+            window.opener.document.getElementById('nameid').value = name1;
+            window.opener.document.getElementById('id').value = id1;
+            alert('a');
+            //close();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<html>
+
+<head></head>
+
+<body>
+    <input type="button" value="打开一个新窗口" onclick="openNewWindow()" />
+    <input type="button" value="清除timeout" onclick="deleteTimeout()" />
+    <script type="text/javascript">
+        function openNewWindow() {
+            open("全局函数.html", "", "width=200,height=160");
+        }
+        var s = setTimeout("alert('1234');", 3000);
+
+        function deleteTimeout() {
+            clearTimeout(s);
+        }
+        //setInterval("alert('1234');", 3000);
+        //close();
+    </script>
+</body>
+
+</html>

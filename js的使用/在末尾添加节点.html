@@ -1,0 +1,24 @@
+<html>
+
+<head></head>
+
+<body>
+    <ul id="ud">
+        <li>111</li>
+    </ul>
+    <script type="text/javascript">
+        //获取ul标签对象
+        var ulid = document.getElementById('ud');
+        //创建li标签对象
+        var addli = document.createElement('li');
+        //创建文本对象
+        var addtext = document.createTextNode("hahaha");
+        //进行节点的添加
+        addli.appendChild(addtext);
+        ulid.appendChild(addli);
+
+        document.write(ulid.textContent);
+    </script>
+</body>
+
+</html>
