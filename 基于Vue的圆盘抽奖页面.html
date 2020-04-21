@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>抽奖</title>
+    <script src="https://cdn.staticfile.org/vue/2.4.2/vue.min.js"></script>
+    <style type="text/css">
+        html {
+            background: #ca6a6b;
+        }
+        
+        .wheel-wrapper {
+            width: 600px;
+            height: 600px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .wheel-pointer {
+            width: 120px;
+            height: 120px;
+            border-radius: 1000px;
+            background: yellow;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            line-height: 120px;
+            z-index: 20;
+            cursor: pointer;
+        }
+        
+        .wheel-pointer::after {
+            content: "";
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            border-width: 0 16px 80px;
+            border-style: solid;
+            border-color: transparent transparent yellow;
+            transform: translateX(-50%);
+        }
+        
+        .wheel-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 1000px;
+            overflow: hidden;
+            transition: transform 4s ease-in-out;
+            background: #7eef97;
+        }
+        
+        .wheel-bg.freeze {
+            transition: none;
+            background: red;
+        }
+        
+        .prize-list {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            text-align: center;
+        }
+        
+        .prize-item-wrapper {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+        }
+        
+        .prize-item {
+            width: 100%;
+            height: 100%;
+            transform-origin: bottom;
+            /* border-radius: 100%;
+            position: absolute;
+            box-sizing: border-box; */
+        }
+        
+        .prize-name {
+            padding: 32px 0;
+        }
+        
+        .icon-px {
+            width: 80px;
+            height: 80px;
+        }
+        /* .position {
+            position: absolute;
+            top: 0;
+            left: 50%;
+        } */
+        
+        p {
+            padding-top: 6px;
+            padding-left: 120px;
+        }
+        
+        table {
+            border: 1px black;
+            padding-top: 6px;
+            padding-left: 120px;
+        }
+        
+        td {
+            text-align: center;
+        }
+        
+        .erCode-px1 {
+            width: 120px;
+            height: 110px;
+            position: absolute;
+            bottom: 400px;
+            right: 130px
+        }
+        
+        .erCode-px2 {
+            width: 120px;
+            height: 110px;
+            position: absolute;
+            bottom: 240px;
+            right: 130px
+        }
+        
+        .erCode-px3 {
+            width: 120px;
+            height: 110px;
+            position: absolute;
+            bottom: 80px;
+            right: 130px
+        }
+    </style>
+
+</head>
+
+<body>
+    <span id="app">
+  <span>奖品数量: {{ prizeNumber }}</span>
+    <button type="button" @click="addPrize()" :disabled="rolling">增加奖品数量</button>
+    <button type="button" @click="!rolling && prizeNumber > 2 && (prizeNumber--)" :disabled="rolling || prizeNumber === 2">减少奖品数量</button>
+    <button type="button" @click="editPrize()">修改奖品</button>
+
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+
+    <br>
+    <table border="1">
+        <tr>
+            <td></td>
+            <td>&nbsp;&nbsp;总次数&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+            <td>抽奖</td>
+            <td>{{clickNumber}}</td>
+        </tr>
+        <tr v-for="(item,index) in prizeList">
+            <td>{{prizeList[index].name}}</td>
+            <td>{{getprizeNumber[index].pnb}}</td>
+        </tr>
+    </table>
+
+
+    <div class="wheel-wrapper">
+        <div class="wheel-pointer" @click="onClickRotate">
+            Start
+        </div>
+        <div class="wheel-bg" :class="{freeze: freeze}" :style="`transform: rotate(${wheelDeg}deg)`">
+            <div class="prize-list">
+                <div class="prize-item-wrapper" v-for="(item,index) in prizeList" :key="index">
+                    <div class="prize-item" :style="`transform: rotate(${(360/ prizeList.length) * index}deg)` ">
+                        <div class="border-size">
+                            <div class="prize-name" id="prize-id">
+                                {{ item.name }}
+                            </div>
+                            <div class="prize-icon">
+                                <img :src="item.icon" class="icon-px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="box">
+        <img src="https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/%E6%8A%BD%E5%A5%96%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%9B%BE%E7%89%871.jpg?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587416717&Signature=6lF7FGx4v%2BlFROZnRQyrfeZZWjY%3D" class="erCode-px1"
+        />
+        <img src="https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/%E6%8A%BD%E5%A5%96%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%9B%BE%E7%89%872.jpg?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587416803&Signature=dDke9j60ft7gelPUzZY5hhxFGdk%3D" class="erCode-px2"
+        />
+        <img src="https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/%E6%8A%BD%E5%A5%96%E4%BA%8C%E7%BB%B4%E7%A0%81%E5%9B%BE%E7%89%873.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587417009&Signature=GIX%2BJhststTVq1oO47ineYFA5G0%3D" class=" erCode-px3 "
+        />
+    </div>
+
+    </span>
+    <script type="text/javascript ">
+        var Main = {
+            data() {
+                return {
+                    freeze: false,
+                    rolling: false,
+                    clickNumber: 0,
+                    wheelDeg: 0,
+                    prizeNumber: 8,
+                    InitPrizeNumber: 8,
+                    getprizeNumber: [{
+                        pnb: 0
+                    }, {
+                        pnb: 0
+                    }, {
+                        pnb: 0
+                    }, {
+                        pnb: 0
+                    }, {
+                        pnb: 0
+                    }, {
+                        pnb: 0
+                    }, {
+                        pnb: 0
+                    }, {
+                        pnb: 0
+                    }],
+                    prizeListOrigin: [{
+                        id: 1,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "特等奖 ",
+                    }, {
+                        id: 2,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "一等奖 ",
+                    }, {
+                        id: 3,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "二等奖 ",
+                    }, {
+                        id: 4,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "三等奖 ",
+                    }, {
+                        id: 5,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "四等奖 ",
+                    }, {
+                        id: 6,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "五等奖 ",
+                    }, {
+                        id: 7,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "六等奖 ",
+                    }, {
+                        id: 8,
+                        icon: "https://focusteam-blog-pic.oss-cn-shenzhen.aliyuncs.com/07xi1.png?OSSAccessKeyId=LTAI4FmmCn1teeyNYGo7r7px&Expires=1587364539&Signature=V1XcAuh3u760xBqQRVGqOEW5G0s%3D ",
+                        name: "谢谢惠顾 ",
+                    }]
+                };
+            },
+            computed: {
+                prizeList() {
+                    return this.prizeListOrigin.slice(0, this.prizeNumber)
+                }
+            },
+            methods: {
+                onClickRotate() {
+                    this.clickNumber++;
+                    if (this.rolling) {
+                        return;
+                    }
+                    this.rolling = true;
+                    const {
+                        wheelDeg,
+                        prizeList
+                    } = this;
+                    const random = Math.floor(Math.random() * (prizeList.length));
+                    console.log(random);
+                    this.wheelDeg =
+                        wheelDeg -
+                        wheelDeg % 360 +
+                        6 * 360 +
+                        (360 - 360 / prizeList.length * random);
+                    setTimeout(() => {
+                        this.rolling = false;
+                        this.getprizeNumber[random].pnb++;
+                        alert("您中的奖是： " + prizeList[random].name);
+                    }, 4500);
+                },
+                getStyle(item, index) {
+                    return 'background-color:' + item.color
+                },
+                editPrize() {
+                    var x = prompt("输入你想要更改的奖项 ", "一等奖");
+                    var i = 0;
+                    var y = prompt("你想要修改成的值 ", "");
+                    var z = prompt("你想要修改成的奖品图片 ", "")
+                    while (i < this.prizeNumber)
+                        if (this.prizeListOrigin[i].name == x && i < this.prizeNumber) {
+                            this.prizeListOrigin[i].name = y;
+                            this.prizeListOrigin[i].icon = z;
+                            alert("恭喜你，修改成功！ ")
+                            i = 0
+                        } else {
+                            i++;
+                        }
+                },
+                addPrize() {
+                    if (this.prizeNumber >= 8) {
+                        var x = prompt("输入你想要添加的奖项名", "");
+                        var y = prompt("输入你想要添加的奖项图片的地址", "");
+                        if (x != "" && x != null) {
+                            this.prizeListOrigin.push({
+                                id: this.prizeNumber++,
+                                icon: y,
+                                name: x
+                            });
+                            this.getprizeNumber.push({
+                                pnb: 0
+                            });
+                            alert("恭喜你，添加成功！");
+                        } else {
+                            alert("您奖项名输入为空");
+                        }
+                    } else if (this.prizeNumber < 8) {
+                        this.prizeNumber++;
+                    }
+                }
+
+            },
+            watch: {
+                prizeNumber() {
+                    this.freeze = true
+                    this.wheelDeg = 0
+
+                    setTimeout(() => {
+                        this.freeze = false
+                    }, 0)
+                }
+            },
+
+        };
+        var App = Vue.extend(Main);
+        new App().$mount("#app ");
+    </script>
+</body>
+
+</html>
